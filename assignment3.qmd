@@ -205,7 +205,7 @@ df8 %>%
 ```
 
 
-8. @fig-eight viser antall utvalg som har en viss p verdi. Vi ser at spredningen er nokså gjevn for både utvalgstørrelsen på 8 og 40. @tbl-eight viser oss at 66 utvalg viser en falsk positiv om utvalgstørrelsen er på 8 observasjoner og 51 falske positive for en utvaglstørrelse på 40 observasjoner om man gjør 1000 reperterte studier. Dette betyr at sannsynligheten for å få et falskt positivt funn er større med en liten utvalgstørrelse til sammenligning med en større utvalgstørrelse.
+8. @fig-eight viser antall utvalg som har en viss p verdi. Vi ser at spredningen er nokså gjevn for både utvalgstørrelsen på 8 og 40. @tbl-eight viser oss at 45 utvalg viser en falsk positiv om utvalgstørrelsen er på 8 observasjoner og 39 falske positive for en utvaglstørrelse på 40 observasjoner om man gjør 1000 reperterte studier. Vi ser dermed at ved å sette en signifikant grense på 0.05 vil vi ved 1000 utvalg ende opp med 4.5% og 3.9% signifikante funn for utvalgstørrelsene 8 og 40 respektivt. Ved uendelig mange utvalg vil vi ende opp med 5% falske positive funn.
 
 ```{r}
 #| echo: false
@@ -214,7 +214,7 @@ df8 %>%
 #| label: "fig-eight"
 #| fig-cap: "Question Eight"
 
-
+set.seed(2)
 population <- rnorm(1000000, mean = 0, sd = 3)
 
 
@@ -279,9 +279,11 @@ results_null %>%
 results_null %>% 
   group_by(n) %>% 
   filter(pval < 0.05) %>% 
-  summarise(count = n()) %>% 
+  summarise(count = n(),
+            percent = (n()/1000) * 100) %>% 
   gt() %>% 
   cols_label(n = "Sample Size",
-             count = "Significant Results")
+             count = "Significant Results",
+             percent = "Percentage (%)")
 ```
 
