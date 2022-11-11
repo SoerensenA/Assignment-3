@@ -54,6 +54,8 @@ ul.task-list{list-style: none;}
 
 </header>
 
+<section id="anders-sørensen-og-torkil-rogneflåten" class="level3">
+<h3 class="anchored" data-anchor-id="anders-sørensen-og-torkil-rogneflåten">Anders Sørensen og Torkil Rogneflåten</h3>
 <ol type="1">
 <li><p>Som vist i <a href="#tbl-one">Table&nbsp;1</a> har modellen med en utvalgsstørrelse på 8 tilfeldige tall fra populasjonen et gjennomsnittet på 1,84. Modellen med en utvalgsstørrelse på 40 tilfeldige tall fra populasjonen har derimot et gjennomsnitt på 1,56. Hvis vi ser på modellen med en utvalgsstørrelse på 8 fikk vi et standard avvik på 3,54. Vi har regnet ut standard error som er standard avvik/kvadratroten av utvalgsstørrelsen. Med andre ord vil det si at om vi gjentatte ganger tar et utvalg på 8 tilfeldige tall fra populasjonen, kommer gjennomsnittetene til utvalgene å ha et standard avvik på 1,25. Dersom vi gjentatte ganger i stedet velger et utvalg på 40 tilfeldige tall, vil gjennomsnittene av utvalgene ha et standard avvik på 0,48. T verdien måler størrelsen på differansen relativt til variasjonen i utvalgsdataen. Vi kalkulerer dette som gjennomsnittet/standard error. P verdi er sannsynligheten for å få et så ekstremt eller mer ekstremt t-tall enn observert.</p></li>
 <li><p>Det er utvalgsstørrelsen som er avgjørende for de forskjellige resultatene i de ulike modellene. Ettersom vi regner ut standard error ved standard avvik/kvadratroten av utvalgsstørrelsen, vil en større utvalgsstørrelse gi en mindre standard error. Siden standard error er mindre vil t-verdien bli høyere da vi regner ut t-verdien som gjennomsnitt/standard error. En høyere t-verdi gir en lavere p-verdi og med det en større sannsynlighet for et signifikant resultat.</p></li>
@@ -925,11 +927,11 @@ ul.task-list{list-style: none;}
   </thead>
   <tbody class="gt_table_body">
     <tr><td class="gt_row gt_right">8</td>
-<td class="gt_row gt_right">1.0270090</td>
-<td class="gt_row gt_right">1.0086488</td></tr>
+<td class="gt_row gt_right">1.027</td>
+<td class="gt_row gt_right">1.009</td></tr>
     <tr><td class="gt_row gt_right">40</td>
-<td class="gt_row gt_right">0.4778172</td>
-<td class="gt_row gt_right">0.4729543</td></tr>
+<td class="gt_row gt_right">0.478</td>
+<td class="gt_row gt_right">0.473</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
@@ -1815,10 +1817,10 @@ ul.task-list{list-style: none;}
   <tbody class="gt_table_body">
     <tr><td class="gt_row gt_right">8</td>
 <td class="gt_row gt_right">0.05</td>
-<td class="gt_row gt_right">0.2320770</td></tr>
+<td class="gt_row gt_right">0.23</td></tr>
     <tr><td class="gt_row gt_right">40</td>
 <td class="gt_row gt_right">0.05</td>
-<td class="gt_row gt_right">0.8693981</td></tr>
+<td class="gt_row gt_right">0.87</td></tr>
   </tbody>
   
   
@@ -1828,7 +1830,7 @@ ul.task-list{list-style: none;}
 </div>
 </div>
 <ol start="8" type="1">
-<li><a href="#fig-eight">Figure&nbsp;2</a> viser antall utvalg som har en viss p verdi. Vi ser at spredningen er nokså gjevn for både utvalgstørrelsen på 8 og 40. <a href="#tbl-eight">Table&nbsp;5</a> viser oss at 45 utvalg viser en falsk positiv om utvalgstørrelsen er på 8 observasjoner og 39 falske positive for en utvaglstørrelse på 40 observasjoner om man gjør 1000 reperterte studier. Dette betyr at sannsynligheten for å få et falskt positivt funn er større med en liten utvalgstørrelse til sammenligning med en større utvalgstørrelse.</li>
+<li><a href="#fig-eight">Figure&nbsp;2</a> viser antall utvalg som har en viss p verdi. Vi ser at spredningen er nokså gjevn for både utvalgstørrelsen på 8 og 40. <a href="#tbl-eight">Table&nbsp;5</a> viser oss at 45 utvalg viser en falsk positiv om utvalgstørrelsen er på 8 observasjoner og 39 falske positive for en utvaglstørrelse på 40 observasjoner om man gjør 1000 reperterte studier. Vi ser dermed at ved å sette en signifikant grense på 0.05 vil vi ved 1000 utvalg ende opp med 4.5% og 3.9% signifikante funn for utvalgstørrelsene 8 og 40 respektivt. Ved uendelig mange utvalg vil vi ende opp med 5% falske positive funn.</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -2255,7 +2257,7 @@ ul.task-list{list-style: none;}
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col">Sample Size</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col">Significant Results</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col">Percentage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col">Percentage (%)</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -2273,6 +2275,7 @@ ul.task-list{list-style: none;}
 </div>
 </div>
 </div>
+</section>
 
 </main>
 <!-- /main column -->

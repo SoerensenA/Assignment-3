@@ -6,6 +6,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+### Anders Sørensen og Torkil Rogneflåten
+
 ```{r}
 #| include: false
 #| label: "setup"
@@ -129,7 +131,9 @@ results %>%
   cols_label(n = "Sample size",
              sd_estimate = "SD of estimate",
              mean_se = "Average of SE") %>% 
-  tab_footnote(footnote = "Abbriviations: SD, standarddiviation; SE, standarderror")
+  tab_footnote(footnote = "Abbriviations: SD, standarddiviation; SE, standarderror") %>% 
+  fmt_number(columns = sd_estimate:mean_se,
+             decimals = 3)
   
 ```
 
@@ -201,7 +205,9 @@ df8 %>%
   gt() %>% 
   cols_label(n = "Sample Size",
              sig.level = "Significant Level",
-             power = "Power")
+             power = "Power") %>% 
+fmt_number(columns = power,
+           decimals = 2)
 ```
 
 
