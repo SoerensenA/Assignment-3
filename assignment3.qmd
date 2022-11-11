@@ -6,9 +6,29 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r} 
+```{r}
+#| include: false
+#| label: "setup"
+
 library(tidyverse)
 library(gt)
+library(broom)
+library(pwr)
+```
+
+
+1. Som vist i @tbl-one har modellen med en utvalgsstørrelse på 8 tilfeldige tall fra populasjonen et gjennomsnittet på 1,84. Modellen med en utvalgsstørrelse på 40 tilfeldige tall fra populasjonen har derimot et  gjennomsnitt på 1,56. Hvis vi ser på modellen med en utvalgsstørrelse på 8 fikk vi et standard avvik på 3,54. Vi har regnet ut standard error som er standard avvik/kvadratroten av utvalgsstørrelsen. Med andre ord vil det si at om vi gjentatte ganger tar et utvalg på 8 tilfeldige tall fra populasjonen, kommer gjennomsnittetene til utvalgene å ha et standard avvik på 1,25. Dersom vi gjentatte ganger i stedet velger et utvalg på 40 tilfeldige tall, vil gjennomsnittene av utvalgene ha et standard avvik på 0,48. T verdien måler størrelsen på differansen relativt til variasjonen i utvalgsdataen. Vi kalkulerer dette som gjennomsnittet/standard error. P verdi er sannsynligheten for å få et så ekstremt eller mer ekstremt t-tall enn observert. 
+
+2.
+
+3.
+
+```{r} 
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "tbl-one"
+#| tbl-cap: "Question One-Three"
 
 set.seed(1)
 population <- rnorm(1000000, mean = 1.5, sd = 3)
@@ -22,9 +42,27 @@ samp2 <- data.frame(y = sample(population, 40, replace = FALSE))
 m1 <- lm(y ~ 1, data = samp1)
 m2 <- lm(y ~ 1, data = samp2)
 
-summary(m1)
-summary(m2)
-``
+df8 <- tidy(summary(m1))
+df40 <- tidy(summary(m2))
+
+
+df8 %>% 
+  full_join(df40) %>% 
+  mutate(n = c(8, 40)) %>% 
+  select(n, 
+         estimate, 
+         std.error, 
+         statistic, 
+         p.value) %>% 
+  gt() %>% 
+  cols_label(n = "Sample Size",
+             estimate = "Estimate",
+             std.error = "SE",
+             statistic = "t value",
+             p.value = "p value") %>% 
+  tab_footnote(footnote = "Abriviations: SE, standardfeil") %>% 
+  fmt_number(columns = estimate:p.value, decimals = 2)
+```
 
 
 
@@ -152,8 +190,7 @@ results %>%
 
 # Using the pwr package
 
-library(pwr)
-library(broom)
+
 
 df8 <- tidy(pwr.t.test(n = 8, sig.level = 0.05, d = 1.5/3, type = "one.sample"))
 
