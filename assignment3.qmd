@@ -22,7 +22,12 @@ m2 <- lm(y ~ 1, data = samp2)
 summary(m1)
 summary(m2)
 ```
-m1 har et utvalg på 8 tilfeldige tall fra populasjonen, hvor gjennomsnittet 
+1) m1 har et utvalg på 8 tilfeldige tall fra populasjonen, hvor gjennomsnittet av disse 8 tallene er 1,84. m2 har derimot et utvalg på 40 tilfeldige tall fra populasjonen, hvor gjennomsnittet av disse 40 tallene er 1,56. 
 
-Utifra den samplen vi har tatt ut på 8 tilfeldige tall, fikk vi et snitt på 1,84, med et sd på 3,539. Vi har regnet ut std. error som er sd/kvadratroten av 8. Om vi gjentatte ganger tar et utvalg på 8 tilfeldige tall fra populasjonen, kommer gjennomsnittetene til utvalgene å ha et standard avvik på 1,251. Dersom vi gjentatte ganger i stedet velger et utvalg på 40 tilfeldige tall, vil gjennomsnittene av utvalgene ha et standard avvik på 0,447. 
+Hvis vi ser på m1 fikk vi et snitt på 1,84 med et standard avvik på 3,539. Vi har regnet ut standard error som er standard avvik/kvadratroten av 8. Med andre ord vil det si at om vi gjentatte ganger tar et utvalg på 8 tilfeldige tall fra populasjonen, kommer gjennomsnittetene til utvalgene å ha et standard avvik på 1,251. Dersom vi gjentatte ganger i stedet velger et utvalg på 40 tilfeldige tall, vil gjennomsnittene av utvalgene ha et standard avvik på 0,447.
+
+T verdien måler størrelsen på differansen relativt til variasjonen i utvalgsdataen. Vi kalkulerer dette som gjennomsnittet/standard error.
+
+P verdi er sannsynligheten for å få et så ekstremt eller mer ekstremt t-tall som vi har fått. 
+
 
