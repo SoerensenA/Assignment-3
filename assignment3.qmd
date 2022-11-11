@@ -2,10 +2,13 @@
 title: "Assignment 3"
 format: html
 editor: source
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r} 
 library(tidyverse)
+library(gt)
 
 set.seed(1)
 population <- rnorm(1000000, mean = 1.5, sd = 3)
@@ -23,4 +26,225 @@ summary(m1)
 summary(m2)
 ``
 
+
+
+4. Som vist i @tbl-four er standardavviket av gjennomsnittet til alle utvalgene svært likt gjennomsnittet til standardfeilen til alle utvalgene for både utvalgstørrelsen 8 og 40, men likere for utvalgstørrelsen 40. Dette skyldes at standardfeilen til gjennomsnittet fra et utvalg kalkulerer den gjennomsnittelige variasjonen (standardavviket) til en hypotestisk distribusjon av utvalg. I dette eksemplet har vi faktisk simulert en distribusjon av utvalg med en størrelse på 1000. Når vi derretter kalkulerer standardavviket til estimatene finner vi den egentlige variasjonen til en distribusjon av utvalg. Dermed blir standaravviket til estimatene og gjennomsnittet av standardfeilen veldig like. For å definere standardfeil ut ifra dette kan vi si at standardfeil er det estimerte standardavviket til estimatetet fra et utvalg i forhold til en hypotetisk distribusjon av utvalg.
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "tbl-four"
+#| tbl-cap: "Question four"
+
+
+# Create data frames to store the model estimates
+results_8 <- data.frame(estimate = rep(NA, 1000), 
+                      se = rep(NA, 1000), 
+                      pval = rep(NA, 1000), 
+                      n = 8)  
+
+results_40 <- data.frame(estimate = rep(NA, 1000), 
+                      se = rep(NA, 1000), 
+                      pval = rep(NA, 1000), 
+                      n = 40)
+
+# A for loop used to sample 1000 studies, each iteration (i) will draw a new sample
+# from the population. 
+
+for(i in 1:1000) {
+  
+  # Draw a sample 
+  samp1 <- data.frame(y = sample(population, 8, replace = FALSE))
+  samp2 <- data.frame(y = sample(population, 40, replace = FALSE))
+
+  # Model the data
+  m1 <- lm(y ~ 1, data = samp1)
+  m2 <- lm(y ~ 1, data = samp2)
+  
+  # Extract values from the models
+  results_8[i, 1] <- coef(summary(m1))[1, 1]
+  results_8[i, 2] <- coef(summary(m1))[1, 2]
+  results_8[i, 3] <- coef(summary(m1))[1, 4]
+
+  results_40[i, 1] <- coef(summary(m2))[1, 1]
+  results_40[i, 2] <- coef(summary(m2))[1, 2]
+  results_40[i, 3] <- coef(summary(m2))[1, 4]
+  
+  
+}
+
+
+# Save the results in a combined data frame
+
+results <- bind_rows(results_8, results_40)
+
+
+# calculate standard diviation of the estimate and mean of SE
+
+results %>% 
+  group_by(n) %>% 
+  summarise(sd_estimate = sd(estimate, na.rm = T),
+            mean_se = mean(se, na.rm = T)) %>% 
+  gt() %>% 
+  cols_label(n = "Sample size",
+             sd_estimate = "SD of estimate",
+             mean_se = "Average of SE") %>% 
+  tab_footnote(footnote = "Abbriviations: SD, standarddiviation; SE, standarderror")
+  
+```
+
+5. I @fig-five ser vi at når det er en gjennomsnittlig forskjell på 1.5 mellom treatment- og kontrollgruppen i populasjonen på 1.5 med et standardavvik på 3, vil en betydelig større andel av utvalgstørrelsen på 40 observasjoner vise en statistisk signifikant forskjell mellom gruppene enn en utvalgstørrelse på 8 observasjoner. Dette viser at utvalgstørrelsen har en stor påvirkningskraft på statistisk styrke. Statistisk styrke kan forklares som evnen/sannsyligheten til å forkaste en nullhypotese.
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "fig-five"
+#| fig-cap: "Question five"
+
+
+# A two facets histogram can be created with ggplot2
+
+results %>%
+  ggplot(aes(pval)) + 
+  geom_histogram() +
+  facet_wrap(~ n)
+```
+
+
+6. @tbl-six viser antall signifikante funn og den prosentvise andelen signifikante funn for utvalgstørrelsene 8 og 40.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "tbl-six"
+#| tbl-cap: "Question six"
+
+
+# Count the proportion of tests below a certain p-value for each 
+
+results %>%
+  filter(pval < 0.05) %>%
+  group_by(n) %>%
+  summarise(count = n(),
+            sig_results = (n()/1000) * 100) %>% 
+  gt() %>% 
+  cols_label(n = md("Sample <br> size"),
+             count = md("significant <br> results"),
+             sig_results = md("significant <br> results (%)"))
+
+```
+
+
+7. Som vi kan se i @tbl-seven så blir den statistiske styrken 0.232 og 0.869 iht utvalgstørrelsene på 8 og 40 når effektstørrelsen er 1.5 / 3 = 0.5. Vi kan tolke dette som at med en effektstørrelse på 0.5 må vi ha en nokså stor utvalgstørrelse, nærmere 40, for å ha en akseptabel statistisk styrke på > 0.8. utvalgstørrelsen på 8 viser en statistisk styrke som er lav og det vil dermed være usannsynlig at man klarer å fange opp en signifikant statistisk forskjell mellom gruppene.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "tbl-seven"
+#| tbl-cap: "Question Seven"
+
+
+# Using the pwr package
+
+library(pwr)
+library(broom)
+
+df8 <- tidy(pwr.t.test(n = 8, sig.level = 0.05, d = 1.5/3, type = "one.sample"))
+
+df40 <- tidy(pwr.t.test(n = 40, sig.level = 0.05, d = 1.5/3, type = "one.sample"))
+
+df8 %>% 
+  full_join(df40) %>% 
+  gt() %>% 
+  cols_label(n = "Sample Size",
+             sig.level = "Significant Level",
+             power = "Power")
+```
+
+
+8. @fig-eight viser antall utvalg som har en viss p verdi. Vi ser at spredningen er nokså gjevn for både utvalgstørrelsen på 8 og 40. @tbl-eight viser oss at 66 utvalg viser en falsk positiv om utvalgstørrelsen er på 8 observasjoner og 51 falske positive for en utvaglstørrelse på 40 observasjoner om man gjør 1000 reperterte studier. Dette betyr at sannsynligheten for å få et falskt positivt funn er større med en liten utvalgstørrelse til sammenligning med en større utvalgstørrelse.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "fig-eight"
+#| fig-cap: "Question Eight"
+
+
+population <- rnorm(1000000, mean = 0, sd = 3)
+
+
+# Create data frames to store the model estimates
+results_8 <- data.frame(estimate = rep(NA, 1000), 
+                      se = rep(NA, 1000), 
+                      pval = rep(NA, 1000), 
+                      n = 8)  
+
+results_40 <- data.frame(estimate = rep(NA, 1000), 
+                      se = rep(NA, 1000), 
+                      pval = rep(NA, 1000), 
+                      n = 40)
+
+# A for loop used to sample 1000 studies, each iteration (i) will draw a new sample
+# from the population. 
+
+for(i in 1:1000) {
+  
+  # Draw a sample 
+  samp1 <- data.frame(y = sample(population, 8, replace = FALSE))
+  samp2 <- data.frame(y = sample(population, 40, replace = FALSE))
+
+  # Model the data
+  m1 <- lm(y ~ 1, data = samp1)
+  m2 <- lm(y ~ 1, data = samp2)
+  
+  # Extract values from the models
+  results_8[i, 1] <- coef(summary(m1))[1, 1]
+  results_8[i, 2] <- coef(summary(m1))[1, 2]
+  results_8[i, 3] <- coef(summary(m1))[1, 4]
+
+  results_40[i, 1] <- coef(summary(m2))[1, 1]
+  results_40[i, 2] <- coef(summary(m2))[1, 2]
+  results_40[i, 3] <- coef(summary(m2))[1, 4]
+  
+  
+}
+
+
+# Save the results in a combined data frame
+
+results_null <- bind_rows(results_8, results_40)
+
+
+# creating a histogram
+
+results_null %>%
+  ggplot(aes(pval)) + 
+  geom_histogram() +
+  facet_wrap(~ n)
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: "tbl-eight"
+#| tbl-cap: "Question Eight"
+
+results_null %>% 
+  group_by(n) %>% 
+  filter(pval < 0.05) %>% 
+  summarise(count = n()) %>% 
+  gt() %>% 
+  cols_label(n = "Sample Size",
+             count = "Significant Results")
+```
 
